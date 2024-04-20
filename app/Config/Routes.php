@@ -18,9 +18,12 @@ $routes->post('/login','UsersController::signIn');
 $routes->post('/register','UsersController::signUp');
 
 $routes->post('/job','Job::postJob');
+$routes->post('/updateJob','Job::updateJob');
+
 
 $routes->get('/pengajuan','Pengajuan::index');
 $routes->post('/pengajuan','Pengajuan::getPengajuan');
+$routes->post('/terimaPengajuan','Pengajuan::terimaPengajuan');
 $routes->post('/apply','Pengajuan::addPengajuan');
 $routes->get('/myapply','Pengajuan::getMyApply');
 $routes->get('/mypost','Pengajuan::getMyPost');

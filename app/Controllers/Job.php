@@ -21,7 +21,7 @@ class Job extends BaseController
         $builder = $db->table('jobs');
         $result = $builder->select("SUBSTR(job_id,2) AS job_id")->orderBy("job_id","DESC")->get(1)->getResult()[0];
         $new_id = "0000000000".((int)$result->job_id + 1);
-        $new_id = "U".substr($new_id, -9, strlen($new_id));
+        $new_id = "J".substr($new_id, -9, strlen($new_id));
 
         $jobName = $this->request->getPost("jobName");
         $jobDesc = $this->request->getPost("jobDesc");
@@ -69,6 +69,41 @@ class Job extends BaseController
     }
 
     public function pengajuan():string{
+        $session =session();
+
+        if($session->get("user_id")!=null){
+            $data["url"] = "Logout";
+        }else{
+            $data["url"] = "Login";
+        }
+        $session->close();
+        
         return view("pengajuan");
+    }
+
+    public function updateJob(){
+        $db      = \Config\Database::connect();
+        $builder = $db->table('jobs');
+
+        $data = [
+            "job_name" => $this->request->getPost("job_name"),
+            "job_type_id" => $this->request->getPost("job_type_id"),
+            "description" => $this->request->getPost("description"),
+            "status" => $this->request->getPost("status")
+        ];
+
+        if($this->request->getPost("begin")!=""){
+            $data["begin"] = $this->request->getPost("begin");
+        }
+        if($this->request->getPost("end")!=""){
+            $data["end"] = $this->request->getPost("end");
+        }
+
+        $res = $builder->where("job_id",$this->request->getPost("job_id"))->update($data);
+
+        return response()->setJson([
+            "status" => "sukses",
+            "message"=> "Berhasil mengupdate job !"
+        ]);
     }
 }

@@ -151,7 +151,6 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-        <button type="button" class="btn btn-primary" id="postJob">Posting</button>
       </div>
     </div>
   </div>
@@ -199,7 +198,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-        <button type="button" class="btn btn-primary" id="ajukan">Ajukan</button>
+        <button type="button" class="btn btn-primary" id="simpanPost">Simpan</button>
       </div>
     </div>
   </div>
@@ -216,12 +215,43 @@
     let updateDesc = document.getElementById("updateDesc");
     let updateBegin = document.getElementById("updateBegin");
     let updateEnd = document.getElementById("updateEnd");
+    let btnSimpan = document.getElementById("simpanPost");
     let listPengajuan = document.getElementById("listPengajuan");
     let data = [];
+    let last_id = "";
+    let update_id = "";
     console.log(container);
     console.log(menu);
 
+    btnSimpan.addEventListener('click',(e)=>{
+        console.log(update_id);
+        $.ajax({
+            method : "POST",
+            url: "updateJob",
+            data : {
+                "job_id" : update_id,
+                "job_name" : updateName.value,
+                "job_type_id" : updateType.value,
+                "description" : updateDesc.value,
+                "begin" : updateBegin.value,
+                "end" : updateEnd.value,
+                "status" : "open"
+            },
+            context: document.body
+        }).done(function(res) {
+           console.log(res);
+            if(res.status == "sukses"){
+              alert(res.message);
+              window.location.reload();
+            }
+        }).fail((e)=>{
+            console.log("Error :" );
+            console.log(e);
+        });;
+    });
+
     function loadDataPengajuan(idx){
+        last_id = idx;
         console.log(idx);
         $.ajax({
             method : "POST",
@@ -231,10 +261,11 @@
             },
             context: document.body
         }).done(function(res) {
+            listPengajuan.innerHTML = "";
             let datas = res["data"];
             for(let idx in datas){
-                console.log(data[idx]);
-                listPengajuan.innerHTML += data[idx];
+               console.log(datas[idx]);
+                listPengajuan.innerHTML += tampilanList(idx, datas[idx]);
             }
             
         }).fail((e)=>{
@@ -242,6 +273,7 @@
             console.log(e);
         });;
     }
+    
 
     function hapusPostingan(idx){
         $.ajax({
@@ -263,6 +295,20 @@
         });;
     }
 
+    function tampilanList(idx,data){
+      let clas = data.status == "open" ? 'data-bs-toggle="modal" data-bs-target="#staticBackdrop"' : '';
+      let aksi =  data.status == "pending" ? '<button onClick="prosesAjuan(`'+data.appeal_id+'`, `accepted`)" '+clas+' style="background-color :  #426B1F; font-weight:bold; border-radius: 10px; color:white;" class="btn">Terima</button> <button onClick="prosesAjuan(`'+data.appeal_id+'`, `declined`)" style="margin-left:10px; color:red; "class="btn ">Tolak</button>' : data.status;
+        return '<div style="float:left;width:100%; height: auto; margin-bottom : 20px; margin-right:20px; left: 523px; top: 301px; background: #FAFAF5; border-radius: 10px; overflow: hidden; padding:10px;" >'
+        + '<table style="width:100%;"><tr style="width:100%;"><td  style="padding:0 10px;"><div style="left: 24px; top: 320px;  color: black; font-size: 20px; font-family: Inter; font-weight: 600; line-height: 26px; word-wrap: break-word">'+data.name+' <br> '+data.email+' <br> '+data.phone+'</div></td>'
+        + ' <td rowspan="3" style=" position:relative;"> '
+        + '    <div style="position:relative; right:0px;padding-left: 23px;  justify-content:center; align-content:flex-end; align-items:end;  top: 0px; overflow: hidden; justify-content: center;  display: flex">'
+        + aksi
+        + '    </div> '
+        +'  </td></tr>'
+        + ' <tr><td  style="padding:0 10px;"><div style="left: 24px; top: 392px;  color: #6D6D6D; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 24px; word-wrap: break-word">'+data.description+'</div></td></tr>'
+        + ' </table> </div>';
+    }
+
     function tampilanPost(idx,data){
         let clas = data.status == "open" ? 'data-bs-toggle="modal" data-bs-target="#staticBackdrop"' : '';
         return '<div style="float:left;width:100%; height: auto; margin-bottom : 20px; margin-right:20px; left: 523px; top: 301px; background: #FAFAF5; border-radius: 10px; overflow: hidden; padding:10px;" >'
@@ -279,12 +325,35 @@
     }
 
     function setAttr(idx){
-        console.log(idx);
+      update_id = data[idx].job_id;
+      console.log(update_id);
         updateName.value = data[idx].job_name;
         updateDesc.value = data[idx].description;
         updateType.value = data[idx].job_type_id;
         updateBegin.value = data[idx].begin;
         updateEnd.value = data[idx].end;
+    }
+
+    function prosesAjuan(id,action){
+      console.log(id, action);
+      $.ajax({
+            method : "POST",
+            url: "terimaPengajuan",
+            data : {
+              "appeal_id" : id,
+              "status" : action
+            },
+            context: document.body
+        }).done(function(res) {
+            if(res.status == "sukses"){
+              alert(res.message);
+              loadDataPengajuan(last_id);
+            }
+            
+        }).fail((e)=>{
+            console.log("Error :" );
+            console.log(e);
+        });
     }
 
     $.ajax({
@@ -295,13 +364,12 @@
             data = res["data"];
             container.innerHTML = "";
             for(let idx in data){
-                console.log(data[idx]);
                 container.innerHTML += tampilanPost(idx,data[idx]);
             }
             
         }).fail((e)=>{
             console.log("Error :" );
             console.log(e);
-        });;
+        });
 </script>
 </html>

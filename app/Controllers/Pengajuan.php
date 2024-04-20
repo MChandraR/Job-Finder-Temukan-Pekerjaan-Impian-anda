@@ -52,7 +52,7 @@ class Pengajuan extends BaseController
     public function getPengajuan(){
         $db      = \Config\Database::connect();
         $builder = $db->table('job_appeal');
-        $data["data"] = $builder->where("job_id",$this->request->getPost("job_id"))->get()->getResult();
+        $data["data"] = $builder->where("job_id",$this->request->getPost("job_id"))->orderBy("appeal_id","DESC")->get()->getResult();
         return response()->setJson($data);
     }
 
@@ -96,13 +96,27 @@ class Pengajuan extends BaseController
             "applicant_id" => $applicant_id,
             "phone" => $phone,
             "email" => $email,
-            "description" => $description
+            "description" => $description,
+            "status" => "pending"
         ]);
         $data["new_id"] = $newID;
         $data["status"] = "sukses";
         $data["message"] = "Berhasil mengajukan permohonan !";
         
         return response()->setJson($data);
+    }
+
+    public function terimaPengajuan(){
+        $db      = \Config\Database::connect();
+        $builder = $db->table('job_appeal');
+        $res = $builder->where("appeal_id", $this->request->getPost("appeal_id"))->update([
+            "status" => $this->request->getPost("status")
+        ]);
+
+        return response()->setJson([
+            "status" => "sukses",
+            "message" => "Berhasil mengupdate data pengajuan !"
+        ]);
     }
 
     public function getMyPost(){
