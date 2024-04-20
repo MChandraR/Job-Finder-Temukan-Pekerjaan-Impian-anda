@@ -166,10 +166,10 @@
             <div style="left: 24px; top: 392px;  color: #6D6D6D; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 24px; word-wrap: break-word"><?=$job->description?></div>
           </td>
         </tr>
-        <tr>
+        <tr class="clicked" id="<?=$job->job_id?>" <?php echo $job->status == "open" ? 'data-bs-toggle="modal" data-bs-target="#staticBackdrop" ' : "" ?> >
           <td style="padding:50px 20px; position:relative; ">
-          <div <?php echo $job->status == "open" ? 'data-bs-toggle="modal" data-bs-target="#staticBackdrop" ' : "" ?> style="position:absolute; right:20px;padding-left: 23px; padding-right: 23px; padding-top: 13.50px; padding-bottom: 13.50px;  top: 32px; background: <?=$job->status=="open" ? "#426B1F" : "red"?>; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; display: inline-flex">
-              <a  class="apply" <?php echo "onClick=".'"'."setId('".$job->job_id."')".'"' ?> style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word ; text-decoration:none;"  ><?=$job->status == "open" ? "Apply" : "Closed"?></a>
+          <div class="btn" style="position:absolute; right:20px;padding-left: 23px; padding-right: 23px; padding-top: 13.50px; padding-bottom: 13.50px;  top: 32px; background: <?=$job->status=="open" ? "#426B1F" : "red"?>; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; display: inline-flex">
+              <a  class="apply" style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word ; text-decoration:none;"  ><?=$job->status == "open" ? "Apply" : "Closed"?></a>
             </div>
           </td>
         </tr>
@@ -244,19 +244,19 @@
         <!-- Form Pengajuan job -->
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Nama</label>
-          <input type="text" class="form-control" id="jobName" placeholder="Masukkan nama anda ">
+          <input type="text" class="form-control" id="applyName" placeholder="Masukkan nama anda ">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">No-HP</label>
-          <input type="text" class="form-control" id="jobStart" placeholder="Masukkan No.Telp !">
+          <input type="text" class="form-control" id="applyPhone" placeholder="Masukkan No.Telp !">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">E-mail</label>
-          <input type="text" class="form-control" id="jobEnd" placeholder="Cantumkan email">
+          <input type="text" class="form-control" id="applyEmail" placeholder="Cantumkan email">
         </div>
         <div class="mb-3">
           <label for="exampleFormControlInput1" class="form-label">Informasi tambahan</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Masukkan informasi mengenai diri anda , jika terdapat portofolo masukkan link url portofolio anda atau berkas lainnya yang sekirannya dibutuhkan !"></textarea>
+          <textarea class="form-control" id="applyDesc" rows="3" placeholder="Masukkan informasi mengenai diri anda , jika terdapat portofolo masukkan link url portofolio anda atau berkas lainnya yang sekirannya dibutuhkan !"></textarea>
         </div>
         <!-- end -->
       </div>
@@ -281,6 +281,11 @@
   let sortBtn = document.getElementById("sort");
   let defaultBtn = document.getElementById("default");
   let availableBtn = document.getElementById("available");
+  let applyName = document.getElementById("applyName");
+  let applyPhone = document.getElementById("applyPhone");
+  let applyEmail = document.getElementById("applyEmail");
+  let applyDesc = document.getElementById("applyDesc");
+
   let jobName = document.getElementById("jobName");
   let jobDesc = document.getElementById("jobDesc");
   let jobType = document.getElementById("jobType");
@@ -294,6 +299,13 @@
     console.log(id);
     jobID = id;
   }
+
+  $(".clicked").on('click', function(event){
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    console.log(event.currentTarget.id);
+    jobID = event.currentTarget.id;
+});
 
   search.addEventListener("keypress", (e)=>{
     if(event.key === "Enter"){
@@ -355,6 +367,29 @@
 
   ajukanBtn.addEventListener('click',(e)=>{
     console.log("Hallo");
+    $.ajax({
+            method : "POST",
+            url: "apply",
+            data : {
+                "job_id" : jobID,
+                "nama" : applyName.value,
+                "phone" : applyPhone.value,
+                "email" : applyEmail.value,
+                "description" : applyDesc.value
+            },
+            context: document.body
+        }).done(function(e) {
+            console.log(e);
+            if(e["status"]=="sukses"){
+                alert("Berhasil register");
+                window.location.reload();
+            }else{
+                alert(e.message);
+            }
+        }).fail((e)=>{
+            console.log("Error :" );
+            console.log(e);
+        });;
   });
 
   // applyBtn.addEventListener('click',(e)=>{

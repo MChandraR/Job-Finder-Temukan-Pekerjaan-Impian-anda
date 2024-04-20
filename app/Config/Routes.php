@@ -21,5 +21,6 @@ $routes->post('/job','Job::postJob');
 
 $routes->get('/pengajuan','Pengajuan::index');
 $routes->post('/pengajuan','Pengajuan::getPengajuan');
+$routes->post('/apply','Pengajuan::addPengajuan');
 $routes->get('/myapply','Pengajuan::getMyApply');
 $routes->get('/mypost','Pengajuan::getMyPost');
