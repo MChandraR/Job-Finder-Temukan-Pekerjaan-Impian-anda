@@ -255,8 +255,8 @@
           <input type="text" class="form-control" id="jobEnd" placeholder="Cantumkan email">
         </div>
         <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label">Keterangan</label>
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          <label for="exampleFormControlInput1" class="form-label">Informasi tambahan</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Masukkan informasi mengenai diri anda , jika terdapat portofolo masukkan link url portofolio anda atau berkas lainnya yang sekirannya dibutuhkan !"></textarea>
         </div>
         <!-- end -->
       </div>
