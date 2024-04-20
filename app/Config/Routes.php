@@ -18,3 +18,8 @@ $routes->post('/login','UsersController::signIn');
 $routes->post('/register','UsersController::signUp');
 
 $routes->post('/job','Job::postJob');
+
+$routes->get('/pengajuan','Pengajuan::index');
+$routes->post('/pengajuan','Pengajuan::getPengajuan');
+$routes->get('/myapply','Pengajuan::getMyApply');
+$routes->get('/mypost','Pengajuan::getMyPost');

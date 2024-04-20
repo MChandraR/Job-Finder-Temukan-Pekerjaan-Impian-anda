@@ -28,6 +28,7 @@ class UsersController extends BaseController
     }
 
     public function signIn(){
+        $session = session();
         $data = [];
         $username =  $this->request->getPost("username");
         $password =  $this->request->getPost("password");
@@ -35,9 +36,10 @@ class UsersController extends BaseController
         if(count($result) > 0){
             $data["status"] = "sukses";
             $data["message"] = "Berhasil login !";
-            session()->set(
+            $session->set(
                 "user_id" ,$result[0]["user_id"]
             );
+            $session->close();
             $data["data"] = $result ;
         }else{
             $data["status"] = "gagal";

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" >
   <title>Document</title>
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <script src="js/bootstrap.min.js"></script>
@@ -73,8 +73,8 @@
         </div>
       </td>
       <td style="padding-right:1rem;">
-        <div style="padding-left: 16px; padding-right: 16px; padding-top: 9.50px; padding-bottom: 9.50px; left: 1243px; top: 76px;  background: white; border-radius: 20px; overflow: hidden; border: 1px #C2C2C2 solid; justify-content: center; align-items: center; display: inline-flex">
-          <a style="text-align: center; color: black; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word; white-space:nowrap;  text-decoration:none;" href="">List view</a>
+        <div id="available" style="padding-left: 16px; padding-right: 16px; padding-top: 9.50px; padding-bottom: 9.50px; left: 1243px; top: 76px;  background: <?=(isset($_GET["available"]) && $_GET["available"]=="true") ?   '#426B1F' : 'white'  ?>; border-radius: 20px; overflow: hidden; border: 1px #C2C2C2 solid; justify-content: center; align-items: center; display: inline-flex">
+          <a style="text-align: center; color:  <?=(isset($_GET["available"]) &&$_GET["available"]=="true") ? 'white' : 'black' ?>; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word; white-space:nowrap;  text-decoration:none;" href="">Available</a>
         </div>
       </td>
     </tr>
@@ -105,6 +105,9 @@
           </td>
           <td style="padding : 0 1rem ;">
             <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="job">Jobs </a></div>
+          </td>
+          <td style="padding : 0 1rem ;">
+            <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="pengajuan">Pengajuan</a></div>
           </td>
           <td style="padding : 0 1rem ;">
             <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="profile">Profile Saya</a></div>
@@ -165,8 +168,8 @@
         </tr>
         <tr>
           <td style="padding:50px 20px; position:relative; ">
-          <div data-bs-toggle="modal" data-bs-target="#staticBackdrop" style="position:absolute; right:20px;padding-left: 23px; padding-right: 23px; padding-top: 13.50px; padding-bottom: 13.50px;  top: 32px; background: #426B1F; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; display: inline-flex">
-              <a onClick="setId('<?=$job->job_id?>')" style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word ; text-decoration:none;" >Apply</a>
+          <div <?php echo $job->status == "open" ? 'data-bs-toggle="modal" data-bs-target="#staticBackdrop" ' : "" ?> style="position:absolute; right:20px;padding-left: 23px; padding-right: 23px; padding-top: 13.50px; padding-bottom: 13.50px;  top: 32px; background: <?=$job->status=="open" ? "#426B1F" : "red"?>; border-radius: 8px; overflow: hidden; justify-content: center; align-items: center; display: inline-flex">
+              <a  class="apply" <?php echo "onClick=".'"'."setId('".$job->job_id."')".'"' ?> style="text-align: center; color: white; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word ; text-decoration:none;"  ><?=$job->status == "open" ? "Apply" : "Closed"?></a>
             </div>
           </td>
         </tr>
@@ -234,15 +237,32 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Ajukan Permohonan</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+        <!-- Form Pengajuan job -->
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">Nama</label>
+          <input type="text" class="form-control" id="jobName" placeholder="Masukkan nama anda ">
+        </div>
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">No-HP</label>
+          <input type="text" class="form-control" id="jobStart" placeholder="Masukkan No.Telp !">
+        </div>
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">E-mail</label>
+          <input type="text" class="form-control" id="jobEnd" placeholder="Cantumkan email">
+        </div>
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">Keterangan</label>
+          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <!-- end -->
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-primary" id="ajukan">Ajukan</button>
       </div>
     </div>
   </div>
@@ -255,16 +275,20 @@
   let jobID = "";
   let key = "<?=(isset($_GET["key"])) ? $_GET["key"] : ""?>";
   let sort = "<?=(isset($_GET["sort"])) ? $_GET["sort"] : ""?>";
+  let available = "<?=(isset($_GET["available"])) ? $_GET["available"] : ""?>";
   let searchBtn = document.getElementById("search");
   let searchIcon = document.getElementById("searchicon");
   let sortBtn = document.getElementById("sort");
   let defaultBtn = document.getElementById("default");
+  let availableBtn = document.getElementById("available");
   let jobName = document.getElementById("jobName");
   let jobDesc = document.getElementById("jobDesc");
   let jobType = document.getElementById("jobType");
   let jobStart = document.getElementById("jobStart");
   let jobEnd = document.getElementById("jobEnd");
   let postBtn = document.getElementById("postJob");
+  let ajukanBtn = document.getElementById("ajukan");
+  let applyBtn = document.getElementsByClassName("apply");
 
   function setId(id){
     console.log(id);
@@ -284,12 +308,17 @@
 
   sortBtn.addEventListener('click',(e)=>{
     e.preventDefault();
-    window.location.href = "job?" + (key != "" ? "key=" + key : "")  + (sort == "desc" || sort == "" ? "&sort=asc" : "&sort=desc");
+    window.location.href = "job?" + (key != "" ? "key=" + key : "")  + (sort == "desc" || sort == "" ? "&sort=asc" : "&sort=desc") + (available != "" ? "&available=" + available : "");
   });
 
   defaultBtn.addEventListener('click',(e)=>{
     e.preventDefault();
-    window.location.href = "job?" + (key != "" ? "key=" + key : "")
+    window.location.href = "job?" + (key != "" ? "key=" + key : "") + (available != "" ? "&available=" + available : "");
+  });
+
+  availableBtn.addEventListener('click',(e)=>{
+    e.preventDefault();
+    window.location.href = "job?" + (key != "" ? "key=" + key : "") + (sort != "" ? "&sort=" + sort : "")+(available == "false" || available == "" ? "&available=true" : "&available=false");
   });
 
   postBtn.addEventListener('click',(e)=>{
@@ -323,5 +352,14 @@
             console.log(e);
         });;
   });
+
+  ajukanBtn.addEventListener('click',(e)=>{
+    console.log("Hallo");
+  });
+
+  // applyBtn.addEventListener('click',(e)=>{
+  //   e.preventDefault();
+  // });
+
 </script>
 </html>

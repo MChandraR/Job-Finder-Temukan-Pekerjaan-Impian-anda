@@ -17,7 +17,6 @@ class Job extends BaseController
     }
 
     public function postJob(){
-        session_start();
         $db      = \Config\Database::connect();
         $builder = $db->table('jobs');
         $result = $builder->select("SUBSTR(job_id,2) AS job_id")->orderBy("job_id","DESC")->get(1)->getResult()[0];
@@ -45,11 +44,11 @@ class Job extends BaseController
             ]);
         }
 
-        if(isset($_SESSION["user_id"]) && $_SESSION["user_id"]!=""){
+        if(session('user_id')!=null){
             $post = model('Jobs')->insert([
                 "job_id" => $new_id,
                 "job_name" => $jobName ,
-                "employer_id" => "U000000001",
+                "employer_id" => session()->get("user_id"),
                 "job_type_id" => $jobType,
                 "description" => $jobDesc,
                 "begin" => $jobStart,
@@ -67,5 +66,9 @@ class Job extends BaseController
         ]);
 
         
+    }
+
+    public function pengajuan():string{
+        return view("pengajuan");
     }
 }
