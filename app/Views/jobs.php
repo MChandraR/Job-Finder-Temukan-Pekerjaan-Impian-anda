@@ -107,10 +107,10 @@
             <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="job">Jobs </a></div>
           </td>
           <td style="padding : 0 1rem ;">
-            <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="pengajuan">Pengajuan</a></div>
+            <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="pengajuan?menu=ajuan">Pengajuan</a></div>
           </td>
           <td style="padding : 0 1rem ;">
-            <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="profile">Profile Saya</a></div>
+            <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="pengajuan?menu=post">Postingan</a></div>
           </td>
           <td>
             <!-- Search bar -->

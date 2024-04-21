@@ -19,9 +19,14 @@ class Job extends BaseController
     public function postJob(){
         $db      = \Config\Database::connect();
         $builder = $db->table('jobs');
-        $result = $builder->select("SUBSTR(job_id,2) AS job_id")->orderBy("job_id","DESC")->get(1)->getResult()[0];
-        $new_id = "0000000000".((int)$result->job_id + 1);
-        $new_id = "J".substr($new_id, -9, strlen($new_id));
+        $result = $builder->select("SUBSTR(job_id,2) AS job_id")->orderBy("job_id","DESC")->get(1)->getResult();
+        if(count($result) > 0){
+            $new_id = "0000000000".((int)$result[0]->job_id + 1);
+            $new_id = "J".substr($new_id, -9, strlen($new_id));
+        }else{
+            $new_id = "J000000001";
+        }
+       
 
         $jobName = $this->request->getPost("jobName");
         $jobDesc = $this->request->getPost("jobDesc");

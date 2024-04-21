@@ -63,8 +63,12 @@ class UsersController extends BaseController
             $data["data"] = "hehe";
             return $this->response->setJson($data);
         }
-        $user_id = $builder->select("SUBSTR(user_id,2) AS user_id")->orderBy("user_id","DESC")->get(1)->getResult()[0];
-        $new_id = "0000000000".(1 + (int)$user_id->user_id);
+        $user_id = $builder->select("SUBSTR(user_id,2) AS user_id")->orderBy("user_id","DESC")->get(1)->getResult();
+        if(count($user_id) > 0){
+            $new_id = "0000000000".(1 + (int)$user_id[0]->user_id);
+        }else{
+            $new_id = "00000000001";
+        }
         model('Users')->insert([
             "user_id" => "U".substr($new_id, -9,strlen($new_id)),
             "username" => $username,

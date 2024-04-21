@@ -97,10 +97,10 @@
             <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="job">Jobs </a></div>
           </td>
           <td style="padding : 0 1rem ;">
-            <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="pengajuan">Pengajuan</a></div>
+            <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="pengajuan?menu=ajuan">Pengajuan</a></div>
           </td>
           <td style="padding : 0 1rem ;">
-            <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="profile">Profile Saya</a></div>
+            <a style="top: 45.50px; float:left; text-align: center; color: black; font-size: 16px; font-family: Arial; font-weight: 400; line-height: 20.80px; word-wrap: break-word; font-weight:bold; text-decoration:none;" href="pengajuan?menu=post">Postingan</a></div>
           </td>
           <td>
             <!-- Search bar -->
@@ -190,6 +190,13 @@
           <label for="exampleFormControlInput1" class="form-label">Recruitment End</label>
           <input type="date" class="form-control" id="updateEnd" >
         </div>
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">Tipe Pekerjaan</label>
+          <select class="form-select" aria-label="Default select example" id="updateStatus" required>
+            <option selected value = "open" >Open</option>
+            <option value = "closed" >Close</option>
+          </select>
+        </div>
         <!-- end -->
       </div>
       <div class="modal-footer">
@@ -211,6 +218,7 @@
     let updateDesc = document.getElementById("updateDesc");
     let updateBegin = document.getElementById("updateBegin");
     let updateEnd = document.getElementById("updateEnd");
+    let updateStatus = document.getElementById("updateStatus");
     let btnSimpan = document.getElementById("simpanPost");
     let listPengajuan = document.getElementById("listPengajuan");
     let data = [];
@@ -218,6 +226,19 @@
     let update_id = "";
     console.log(container);
     console.log(menu);
+    let sort="";
+    let searchBtn = document.getElementById("search");
+    let searchIcon = document.getElementById("searchicon");
+
+    searchIcon.addEventListener('click',(e)=>{
+      window.location.href = "job?key=" + searchBtn.value + (sort=="" ? "" : "&sort=" + sort);
+    });
+
+    search.addEventListener("keypress", (e)=>{
+      if(event.key === "Enter"){
+        window.location.href = "job?key=" + searchBtn.value;
+      }
+    });
 
     btnSimpan.addEventListener('click',(e)=>{
         console.log(update_id);
@@ -231,7 +252,7 @@
                 "description" : updateDesc.value,
                 "begin" : updateBegin.value,
                 "end" : updateEnd.value,
-                "status" : "open"
+                "status" : updateStatus.value
             },
             context: document.body
         }).done(function(res) {
@@ -306,9 +327,10 @@
     }
 
     function tampilanPost(idx,data){
-        let clas = data.status == "open" ? 'data-bs-toggle="modal" data-bs-target="#staticBackdrop"' : '';
+        let clas =  'data-bs-toggle="modal" data-bs-target="#staticBackdrop"';
+        let color = data.status == "open" ? "green" : "red";
         return '<div style="float:left;width:100%; height: auto; margin-bottom : 20px; margin-right:20px; left: 523px; top: 301px; background: #FAFAF5; border-radius: 10px; overflow: hidden; padding:10px;" >'
-        + '<table style="width:100%;"><tr><td  style="padding:0 10px;"><div style="left: 24px; top: 320px;  color: black; font-size: 20px; font-family: Inter; font-weight: 600; line-height: 26px; word-wrap: break-word">'+data.job_name+' - '+data.type_name+'</div></td>'
+        + '<table style="width:100%;"><tr><td  style="padding:0 10px;"><div style="left: 24px; top: 320px;  color: black; font-size: 20px; font-family: Inter; font-weight: 600; line-height: 26px; word-wrap: break-word">'+data.job_name+' - '+data.type_name+' </div></td>'
         + ' <td rowspan="3" style=" position:relative; "> '
         + '    <div style="position:relative; right:0px;padding-left: 23px;  justify-content:center;  top: 0px; overflow: hidden; justify-content: center; align-items: center; display: inline-flex">'
         + '     <button onClick="setAttr('+idx+')" '+clas+' style="background-color :  #426B1F; font-weight:bold; border-radius: 10px; color:white;" class="btn">Update</button>'
@@ -316,6 +338,7 @@
         + '    </div> '
         +'  </td></tr>'
         + ' <tr><td  style="padding:0 10px;"><div style="left: 24px; top: 392px;  color: #6D6D6D; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 24px; word-wrap: break-word">'+data.description+'</div></td></tr>'
+        + ' <tr><td  style="padding:0 10px;"><div style="left: 24px; top: 392px;   font-size: 16px; font-family: Inter; font-weight: 400; line-height: 24px; word-wrap: break-word; color:'+color+';"> Status : '+data.status+'</div></td></tr>'
         + ' <tr><td onclick="loadDataPengajuan('+idx+')" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width:100%;  text-align:center;"><a class="btn">Lihat data pengajuan</a></td></tr>';
         + ' </table> </div>';
     }
@@ -344,6 +367,7 @@
         updateType.value = data[idx].job_type_id;
         updateBegin.value = data[idx].begin;
         updateEnd.value = data[idx].end;
+        updateStatus.value = data[idx].status;
     }
 
     function prosesAjuan(id,action){

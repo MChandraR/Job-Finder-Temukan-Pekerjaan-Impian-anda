@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport">
     <title>Job Finder Portal</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
@@ -13,7 +13,7 @@
         background-image: url("/images/banner.jpg");
         background-repeat : no-repeat;
         background-size : cover;
-        padding : 5rem;
+        padding : 10rem;
     }
 
     .body2{
@@ -28,7 +28,7 @@
 <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Job Finder</a>
+        <a class="navbar-brand" href="#" style="font-famyli:arial; font-size : 2rem; font-weight:bold;">Job Finder</a>
         <!-- Add other navigation links here -->
     </nav>
     <div class="bgimage">
@@ -61,11 +61,11 @@
 
     <center>           
     <!-- Featured Jobs -->
-    <section class="featured-jobs body2">
+    <!-- <section class="featured-jobs body2">
         <div class="container">
             <h1 class="s-text"> Temukan pekerjaan mu </h1>
         </div>
-    </section>
+    </section> -->
     <center>
 
     <!-- Testimonials -->
