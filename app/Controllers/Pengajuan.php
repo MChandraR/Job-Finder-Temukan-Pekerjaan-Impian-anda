@@ -33,10 +33,16 @@ class Pengajuan extends BaseController
     
     public function getMyApply(){
         $db      = \Config\Database::connect();
-        $builder = $db->table('jobs');
-        return response()->setJson([
-            "message" =>  "apply"
-        ]);
+        $builder = $db->table('job_appeal');
+        $session = session();
+        if($session->get("user_id")==null){
+            return reponse()->setJson([
+                "status" => "sukses",
+                "message" => "Harap login terlebih dahulu !"
+            ]);
+        }
+        $data["data"] = $builder->select("job_name, job_appeal.job_id, time, job_appeal.status, jobs.description")->where("applicant_id",$session->get("user_id"))->join("jobs", "job_appeal.job_id = jobs.job_id")->orderBy("appeal_id","DESC")->get()->getResult();
+        return response()->setJson($data);
     }
 
     public function deletePostingan(){
@@ -54,6 +60,10 @@ class Pengajuan extends BaseController
         $builder = $db->table('job_appeal');
         $data["data"] = $builder->where("job_id",$this->request->getPost("job_id"))->orderBy("appeal_id","DESC")->get()->getResult();
         return response()->setJson($data);
+    }
+
+    public function getMyPengajuan(){
+        
     }
 
     public function addPengajuan(){

@@ -61,13 +61,13 @@
       </td>
 
       <td>
-        <div id="default" style="padding-left: 16px; padding-right: 16px; padding-top: 9.50px; padding-bottom: 9.50px; left: 1077px; top: 76px;  background: <?=(isset($_GET["sort"]) && ($_GET["sort"]=="asc"||$_GET["sort"]=="desc" )) ? 'white' :  '#426B1F'  ?>; border-radius: 20px; overflow: hidden;  border: 1px #C2C2C2 solid;justify-content: center; align-items: center; display: inline-flex">
-          <a style="text-align: center; color:<?=(isset($_GET["sort"]) && ($_GET["sort"]=="asc"||$_GET["sort"]=="desc" )) ?  'black' : 'white' ?>; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word ;  text-decoration:none;" href="">Pengajuan</a>
+        <div id="default" style="padding-left: 16px; padding-right: 16px; padding-top: 9.50px; padding-bottom: 9.50px; left: 1077px; top: 76px;  background: <?=(isset($_GET["menu"]) ) ?  ($_GET["menu"]=="ajuan"||$_GET["menu"]==""   ? '#426B1F' : 'white' ):'#426B1F'   ?>; border-radius: 20px; overflow: hidden;  border: 1px #C2C2C2 solid;justify-content: center; align-items: center; display: inline-flex">
+          <a style="text-align: center; color:<?=(isset($_GET["menu"]) ) ?  ($_GET["menu"]=="ajuan"||$_GET["menu"]==""   ? 'white' : 'black' ):'white'   ?>; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word ;  text-decoration:none;" href="pengajuan?menu=ajuan">Pengajuan</a>
         </div>
       </td>
       <td style="padding-right:1rem;">
-        <div id="available" style="padding-left: 16px; padding-right: 16px; padding-top: 9.50px; padding-bottom: 9.50px; left: 1243px; top: 76px;  background: <?=(isset($_GET["available"]) && $_GET["available"]=="true") ?   '#426B1F' : 'white'  ?>; border-radius: 20px; overflow: hidden; border: 1px #C2C2C2 solid; justify-content: center; align-items: center; display: inline-flex">
-          <a style="text-align: center; color:  <?=(isset($_GET["available"]) &&$_GET["available"]=="true") ? 'white' : 'black' ?>; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word; white-space:nowrap;  text-decoration:none;" href="">Postingan</a>
+        <div id="available" style="padding-left: 16px; padding-right: 16px; padding-top: 9.50px; padding-bottom: 9.50px; left: 1243px; top: 76px;  background: <?=(isset($_GET["menu"]) && $_GET["menu"]=="post"  ) ? '#426B1F' : 'white'    ?>; border-radius: 20px; overflow: hidden; border: 1px #C2C2C2 solid; justify-content: center; align-items: center; display: inline-flex">
+          <a style="text-align: center; color:   <?=(isset($_GET["menu"]) && ($_GET["menu"]=="post"  )) ? 'white' : 'black' ?>; font-size: 16px; font-family: Inter; font-weight: 600; line-height: 20.80px; word-wrap: break-word; white-space:nowrap;  text-decoration:none;" href="pengajuan?menu=post">Postingan</a>
         </div>
       </td>
       <td style=" width : 95%;">
@@ -132,10 +132,6 @@
 
   </div>
  
-</div>
-<!-- Tombol add job -->
-<div style="position:fixed;padding-left: 23px; padding-right: 23px; padding-top: 13.50px; padding-bottom: 13.50px;  bottom: 1rem; right : 1rem; background: #426B1F; border-radius: 15px; overflow: hidden; justify-content: center; align-items: center; display: inline-flex">
-  <a style="text-align: center; color: white; font-size: 16px; font-family: Arial; font-weight: 600; line-height: 20.80px; word-wrap: break-word ; text-decoration:none;">Post Job</a>
 </div>
 
 <!-- Modal -->
@@ -297,7 +293,7 @@
 
     function tampilanList(idx,data){
       let clas = data.status == "open" ? 'data-bs-toggle="modal" data-bs-target="#staticBackdrop"' : '';
-      let aksi =  data.status == "pending" ? '<button onClick="prosesAjuan(`'+data.appeal_id+'`, `accepted`)" '+clas+' style="background-color :  #426B1F; font-weight:bold; border-radius: 10px; color:white;" class="btn">Terima</button> <button onClick="prosesAjuan(`'+data.appeal_id+'`, `declined`)" style="margin-left:10px; color:red; "class="btn ">Tolak</button>' : data.status;
+      let aksi =  data.status == "pending" ? '<button onClick="prosesAjuan(`'+data.appeal_id+'`, `diterima`)" '+clas+' style="background-color :  #426B1F; font-weight:bold; border-radius: 10px; color:white;" class="btn">Terima</button> <button onClick="prosesAjuan(`'+data.appeal_id+'`, `ditolak`)" style="margin-left:10px; color:red; "class="btn ">Tolak</button>' : data.status;
         return '<div style="float:left;width:100%; height: auto; margin-bottom : 20px; margin-right:20px; left: 523px; top: 301px; background: #FAFAF5; border-radius: 10px; overflow: hidden; padding:10px;" >'
         + '<table style="width:100%;"><tr style="width:100%;"><td  style="padding:0 10px;"><div style="left: 24px; top: 320px;  color: black; font-size: 20px; font-family: Inter; font-weight: 600; line-height: 26px; word-wrap: break-word">'+data.name+' <br> '+data.email+' <br> '+data.phone+'</div></td>'
         + ' <td rowspan="3" style=" position:relative;"> '
@@ -316,11 +312,27 @@
         + ' <td rowspan="3" style=" position:relative; "> '
         + '    <div style="position:relative; right:0px;padding-left: 23px;  justify-content:center;  top: 0px; overflow: hidden; justify-content: center; align-items: center; display: inline-flex">'
         + '     <button onClick="setAttr('+idx+')" '+clas+' style="background-color :  #426B1F; font-weight:bold; border-radius: 10px; color:white;" class="btn">Update</button>'
-        + '     <button style="margin-left:10px; color:red; "class="btn ">Hapus</button>'
+        + '     <button onClick="hapusJob(`'+data.job_id+'`)" style="margin-left:10px; color:red; "class="hapus_job btn " job_id="'+data.job_id+'">Hapus</button>'
         + '    </div> '
         +'  </td></tr>'
         + ' <tr><td  style="padding:0 10px;"><div style="left: 24px; top: 392px;  color: #6D6D6D; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 24px; word-wrap: break-word">'+data.description+'</div></td></tr>'
         + ' <tr><td onclick="loadDataPengajuan('+idx+')" data-bs-toggle="modal" data-bs-target="#exampleModal" style="width:100%;  text-align:center;"><a class="btn">Lihat data pengajuan</a></td></tr>';
+        + ' </table> </div>';
+    }
+
+    function tampilanApply(idx,data){
+        let color = data.status == "diterima"  ? "green" : "red";
+        if(data.status=="pending") color = 'blue';
+        let clas = data.status == "open" ? 'data-bs-toggle="modal" data-bs-target="#staticBackdrop"' : '';
+        return '<div style="float:left;width:100%; height: auto; margin-bottom : 20px; margin-right:20px; left: 523px; top: 301px; background: #FAFAF5; border-radius: 10px; overflow: hidden; padding:10px;" >'
+        + '<table style="width:100%;"><tr><td  style="padding:0 10px;"><div style="left: 24px; top: 320px;  color: black; font-size: 20px; font-family: Inter; font-weight: 600; line-height: 26px; word-wrap: break-word">'+data.job_id+' - '+data.job_name+'</div></td>'
+        + ' <td rowspan="3" style=" position:relative; "> '
+        + '    <div style="position:relative; right:0px;padding-left: 23px;  justify-content:center;  top: 0px; overflow: hidden; justify-content: center; align-items: center; display: inline-flex">'
+        + '     <button style="margin-left:10px; color:'+color+'; "class="btn ">'+data.status+'</button>'
+        + '    </div> '
+        +'  </td></tr>'
+        + ' <tr><td  style="padding:0 10px;"><div style="left: 24px; top: 392px;  color: #6D6D6D; font-size: 16px; font-family: Inter; font-weight: 400; line-height: 24px; word-wrap: break-word">'+data.description+'</div></td></tr>'
+        + ' <tr><td  style="width:100%; padding:0 10px;  text-align:left;"><a >Waktu pengajuan : '+data.time+'</a></td></tr>';
         + ' </table> </div>';
     }
 
@@ -356,15 +368,38 @@
         });
     }
 
+    function hapusJob(id){
+      $.ajax({
+            method : "POST",
+            url: "deleteJob",
+            data : {
+              "job_id" : id
+            },
+            context: document.body
+        }).done(function(res) {
+            if(res.status == "sukses"){
+              alert(res.message);
+              window.location.reload();
+            }
+            
+        }).fail((e)=>{
+            console.log("Error :" );
+            console.log(e);
+        });
+      console.log(id);
+    
+    };
+
     $.ajax({
             method : "GET",
-            url: menu == "" || menu == "pengajuan" ? "myapply" : "mypost",
+            url: menu == "" || menu == "ajuan" ? "myapply" : "mypost",
             context: document.body
         }).done(function(res) {
             data = res["data"];
+            console.log(res);
             container.innerHTML = "";
             for(let idx in data){
-                container.innerHTML += tampilanPost(idx,data[idx]);
+                container.innerHTML +=  menu == "" || menu == "ajuan" ? tampilanApply(idx,data[idx]) : tampilanPost(idx,data[idx]);
             }
             
         }).fail((e)=>{

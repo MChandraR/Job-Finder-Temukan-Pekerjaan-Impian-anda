@@ -18,6 +18,7 @@ $routes->post('/login','UsersController::signIn');
 $routes->post('/register','UsersController::signUp');
 
 $routes->post('/job','Job::postJob');
+$routes->post('/deleteJob','Job::hapusJob');
 $routes->post('/updateJob','Job::updateJob');
 
 

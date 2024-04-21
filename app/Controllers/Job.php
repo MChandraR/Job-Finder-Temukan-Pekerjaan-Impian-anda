@@ -106,4 +106,17 @@ class Job extends BaseController
             "message"=> "Berhasil mengupdate job !"
         ]);
     }
+
+    public function hapusJob(){
+        $db      = \Config\Database::connect();
+        $builder = $db->table('jobs');
+
+        if($this->request->getPost("job_id") != ""){
+            $builder->where("job_id", $this->request->getPost("job_id"))->delete();
+        }
+        return response()->setJson([
+            "status" => "sukses",
+            "message" => "Berhasil menghapus data !"
+        ]);
+    }
 }

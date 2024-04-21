@@ -135,7 +135,7 @@
   </div>
   <!-- Bagian container -->
 
-  <div style="padding:0 5rem; float:left; position:absolute; top: 301px;">
+  <div style="padding:0 1vw 0 5rem; float:left; position:absolute; top: 301px;">
   <?php foreach($jobs as $job){
     if(isset($_GET["key"])){
       if(!str_contains(strtolower($job->job_name), strtolower($_GET["key"]))){
@@ -144,11 +144,11 @@
     }
 
   ?>
-    <div style="float:left;width: 23rem; height: auto; margin-bottom : 20px; margin-right:20px; left: 523px; top: 301px; background: #FAFAF5; border-radius: 24px; overflow: hidden;" >
+    <div style="float:left;width: 29vw; height: auto; margin-bottom : 20px; margin-right:20px; left: 523px; top: 301px; background: #FAFAF5; border-radius: 24px; overflow: hidden;" >
       <table >
         <tr>
           <td>
-            <img style="width: 23rem; height:12rem; left: 0px; top: 0px; " src="images/banner.jpg" />
+            <img style="width: 29vw; height:12rem; left: 0px; top: 0px; " src="images/banner.jpg" />
           </td>
         </tr>
         <tr>
