@@ -1,3 +1,6 @@
+Ini merupakan project website simpel menggunakan CI 4 ( PHP 8)
+Dimana website ini bertujuan untuk menyediakan tawaran pekerjaan bagi para pelamar.
+
 # CodeIgniter 4 Application Starter
 
 ## What is CodeIgniter?
